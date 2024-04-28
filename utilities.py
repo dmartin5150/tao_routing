@@ -4,7 +4,7 @@ import pandas as pd
 practice_routing = 5533
 
 def fill_na_with_all(df):
-    values = {"Provider ID": "All", "Order Type ID":"All", "Order Type":"All",}
+    values = {"Provider ID": "All", "Order Type ID":"All", "Order Type":"All","Order Genus":"None"}
     return df.fillna(value=values)
 
 def update_dictionary_values(row, name_column, value_column,value_dict):
@@ -60,7 +60,12 @@ def process_routing_row(row,depts, providers,df):
     return df
 
 
-    
+def get_genus(df):
+    genus_list = []
+    for index, row in df.iterrows():
+        cur_row = row['Order Genus'].split(',')
+        genus_list = set([*genus_list,*cur_row])
+    return genus_list
 
 
 
