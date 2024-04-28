@@ -1,6 +1,6 @@
 import pandas as pd
 
-from utilities import fill_na_with_all,create_routing_table,add_departments_and_providers,get_genus
+from utilities import fill_na_with_all,create_routing_table,add_departments_and_providers,get_genus,update_routing_rows
 
 taos_raw_data = pd.read_csv('TAO.csv')
 providers = {'NF':'-1'}
@@ -21,10 +21,8 @@ athena_data_frame = pd.DataFrame(columns=columns)
 
 tao_fl = taos_raw_data[taos_raw_data['CONTEXT_NAME'] == 'FL - Ascension - Florida']
 tao_fl = fill_na_with_all(tao_fl)
+tao_fl = update_routing_rows(tao_fl)
 departments, providers = add_departments_and_providers(tao_fl,departments,providers)
+print(tao_fl)
 genus = get_genus(tao_fl)
 athena_data_frame = create_routing_table(tao_fl,departments,providers,athena_data_frame)
-# athena_data_frame.to_csv('athena.csv')
-# print(athena_data_frame)
-# print (tao_fl.columns)
-# print (create_routing_table(tao_fl))
