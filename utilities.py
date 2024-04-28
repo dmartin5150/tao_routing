@@ -30,7 +30,7 @@ def update_dictionary_values(row, name_column, value_column,value_dict):
 def process_routing_column(value):
     if value == 'All':
         return ['All']
-    return value.split(',')
+    return value.split(',') 
 
 
 def process_department_and_provider_row(row, depts, providers):
