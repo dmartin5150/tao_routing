@@ -1,7 +1,7 @@
 
 import pandas as pd
-
-
+# Data for practice routing is incomplete so will not process for now
+practice_routing = 5533
 
 def fill_na_with_all(df):
     values = {"Provider ID": "All", "Order Type ID":"All", "Order Type":"All",}
@@ -14,27 +14,23 @@ def update_dictionary_values(row, name_column, value_column,value_dict):
     else:
         names = row[name_column].split(',')
         ids = row[value_column].split(',')
-        for x, y in zip(ids, names):
-            value_dict[x] = y
+    # if(row['TAO ID'] == practice_routing):
+    #     print('names', names, 'num', len(names))
+    #     print('ids', ids, 'num ids', len(ids))
+    for x, y in zip(ids, names):
+        value_dict[x.strip()] = y.strip()
     return value_dict
 
 
-# def create_orders(row, name_column, value_column):
-#     # print('row ', row)
-#     depts = {}
-#     if(row[name_column] == 'All'):
-#         depts[value_column] = 'All'
-#         return depts
-#     else:
-#         depts[row[value_column]] = row[name_column]
-#     return depts
-
-
+# keeping as an example for apply for now
 # def add_departments(df):
 #     df['depts'] = df.apply(lambda row: create_value_pairs(row, 'Department', 'Department ID'), axis=1)
 #     return df
 
-
+def process_routing_column(value):
+    if value == 'All':
+        return ['All']
+    return value.split(',')
 
 
 def process_department_and_provider_row(row, depts, providers):
@@ -44,27 +40,35 @@ def process_department_and_provider_row(row, depts, providers):
 
 def add_departments_and_providers(df, depts, providers):
     for index, row in df.iterrows():
-        depts, providers = process_department_and_provider_row(row, depts, providers)
+        if(row['TAO ID'] != practice_routing):
+            depts, providers = process_department_and_provider_row(row, depts, providers)
     return depts, providers
 
-# def process_routing_row(row):
-#     departments = process_routing_column(row['Department ID'])
-#     providers = process_routing_column(row['Provider ID'])
-    # for dept in departments:
-    #     for provider in providers:
-    #         new_row = row.copy()
-    #             print(new_row)
-    # return row
+def process_routing_row(row,depts, providers,df):
+    cur_depts = process_routing_column(row['Department ID'])
+    cur_providers = process_routing_column(row['Provider ID'])
+    for dept in cur_depts:
+        for provider in cur_providers:
+            if row['TAO ID'] == 5533:
+                continue
+            new_row = row.copy()
+            new_row['Provider ID'] = provider
+            new_row['Provider'] = providers[provider.strip()]
+            new_row['Department ID'] = dept
+            new_row['Department'] = depts[dept.strip()] 
+            df = pd.concat([pd.DataFrame([new_row]), df], ignore_index=True) 
+    return df
 
 
     
 
 
 
-def create_routing_table (df):
-    # for index, row in df.iterrows():
-    #     process_routing_row(row)
-    return df
+def create_routing_table (df, depts, providers,routing_df):
+    for index, row in df.iterrows():
+        if(row['TAO ID'] != practice_routing):
+            routing_df = process_routing_row(row,depts, providers,routing_df)
+    return routing_df
 
         
 
