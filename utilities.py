@@ -19,14 +19,6 @@ def update_dictionary_values(row, name_column, value_column,value_dict):
     return value_dict
 
 
-
-
-
-# keeping as an example for apply for now
-# def add_departments(df):
-#     df['depts'] = df.apply(lambda row: create_value_pairs(row, 'Department', 'Department ID'), axis=1)
-#     return df
-
 def process_routing_column(value):
     if value == 'All':
         return ['All']
@@ -80,15 +72,32 @@ def process_routing_row(row,depts, providers,df):
     return df
 
 
+# def get_genus(df):
+#     genus_list = []
+#     for index, row in df.iterrows():
+#         cur_row = row['Order Genus'].split(',')
+#         genus_list = set([*genus_list,*cur_row])
+#     genus_stripped_list = [j.strip() for j in genus_list]
+#     return genus_stripped_list
+
 def get_genus(df):
-    genus_list = []
-    for index, row in df.iterrows():
-        cur_row = row['Order Genus'].split(',')
-        genus_list = set([*genus_list,*cur_row])
-    genus_stripped_list = [j.strip() for j in genus_list]
-    return genus_stripped_list
+    genus_df = df[['Order Genus']]
+    genus_group = genus_df.groupby(by=['Order Genus'])
+    genus =[]
+    for name_of_group,contents_of_group  in genus_group:
+        cur_group = {'name': name_of_group[0]}
+        genus.append(cur_group)
+    return genus
 
 
+def get_departments(df):
+    department_df = df[['Department ID', 'Department']]
+    department_group = department_df.groupby(by=[ 'Department','Department ID',])
+    depts =[]
+    for name_of_group,contents_of_group  in department_group:
+        cur_group = {'name': name_of_group[0], 'value': name_of_group[1] }
+        depts.append(cur_group)
+    return depts
 
 def create_routing_table (df, depts, providers,routing_df):
     for index, row in df.iterrows():
