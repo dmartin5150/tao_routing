@@ -3,6 +3,7 @@ import pandas as pd
 from utilities import fill_na_with_all,create_routing_table,get_genus, get_departments,update_routing_rows,add_departments_and_providers
 from orders import order_dtypes, fill_orders_na_with_all, remove_comments,get_order_providers, get_order_genus,get_genus_orderIds
 from providers import get_providers
+from routing import route
 
 columns = ['CONTEXT_ID', 'CONTEXT_NAME', 'TAO ID', 'Last Modified Date',
        'Document Class/Subclass', 'Document Class/Subclass ID', 'Ordering',
@@ -13,7 +14,6 @@ columns = ['CONTEXT_ID', 'CONTEXT_NAME', 'TAO ID', 'Last Modified Date',
 
 taos_raw_data = pd.read_csv('TAO.csv')
 tao_orders = pd.read_csv('TAOOrders.csv', dtype=order_dtypes)
-
 
 providers = {}
 departments = {}
@@ -40,6 +40,10 @@ get_genus_orderIds(tao_orders)
 # print(departments)
 # print(athena_data_frame['Order Type ID'])
 # print(get_departments(athena_data_frame))
-
 # tao_orders = pd.concat([pd.DataFrame([new_row]), tao_orders], ignore_index=True) 
 get_providers('fljac_providers.json')
+# print(athena_data_frame.columns)
+# print(athena_data_frame[athena_data_frame['Department ID'] == '768'])
+routes = route(athena_data_frame, 'All', 'All', 'All', 427181).sort_values(by='Ordering')
+print(routes[['TAO ID','Ordering','Assigned To']])
+# print(athena_data_frame[athena_data_frame['TAO ID'] == 7787 ])
