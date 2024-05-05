@@ -6,6 +6,21 @@ practice_routing = 5533
 
 
 
+def add_new_route(df, tao_id, depts,dept_ids, providers, provider_ids,priority, genus, order_type, order_type_ids):
+    new_row = df.iloc[0].copy()
+    new_row['TAO ID'] = tao_id
+    new_row['Department']= depts.tolist()
+    new_row['Department ID'] = dept_ids.tolist()
+    new_row['Dept_ID_List'] = dept_ids
+    new_row['Provider'] = providers.tolist()
+    new_row['Provider ID'] = provider_ids.tolist()
+    new_row['Ordering'] = priority
+    new_row['Order Genus'] = genus.tolist()
+    new_row['Genus_List'] = genus
+    new_row['Order Type'] = order_type
+    new_row['Order Type ID'] = order_type_ids
+    df = pd.concat([pd.DataFrame([new_row]), df], ignore_index=True) 
+    return df
 
 
 def update_routing_rows(df):
