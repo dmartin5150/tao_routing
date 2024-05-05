@@ -25,9 +25,9 @@ tao_orders = pd.read_csv('TAOOrders.csv', dtype=order_dtypes)
 tao_orders = fill_orders_na_with_all(tao_orders)
 tao_orders = remove_comments(tao_orders)
 drop_downs = get_dropdowns(tao_orders,athena_tao_rules)
-print(athena_tao_rules.shape[0])
+print(drop_downs[0])
 athena_tao_rules = add_new_route(athena_tao_rules,'-1', ['New Deparment'],['New DepartmentID'],['All'],['All'],'-1',['All'],['All'],['All'])
-print(athena_tao_rules[athena_tao_rules['TAO ID'] == '-1'])
+# print(athena_tao_rules[athena_tao_rules['TAO ID'] == '-1'])
 # routes = route(athena_tao_rules, 'All', 'All', 'All', 427181).sort_values(by='Ordering')
 
 

@@ -1,18 +1,24 @@
 def get_genus(df):
     genus_df = df[['orderGenus']]
     genus_group = genus_df.groupby(by=['orderGenus'])
-    genus =[]
+    genus =[{'label': 'All', 'value': '0'}]
+    i = 1
     for name_of_group,contents_of_group  in genus_group:
-        cur_group = {'name': name_of_group[0]}
+        if name_of_group[0] == 'All':
+            continue
+        cur_group = {'label': name_of_group[0], 'value': i}
         genus.append(cur_group)
-    return genus
+        i += 1
+    return  genus
 
 def get_genus_orderIds(df):
 
     genus_df = df[['orderGenus','clinicalOrderTypeId','orderName']]
     genus_group = genus_df.groupby(by=['orderGenus','clinicalOrderTypeId','orderName'])
-    genus_order =[]
+    genus_order =[{'superset': 'All', 'label':'All', 'value':'0'}]
     for name_of_group,contents_of_group  in genus_group:
-        cur_group = {'genus': name_of_group[0],'name': name_of_group[2], 'value': name_of_group[1], }
+        if (name_of_group[0]  == 'All') | (name_of_group[1] == 'All'):
+            continue
+        cur_group = {'superset': name_of_group[0],'label': name_of_group[2], 'value': name_of_group[1]} 
         genus_order.append(cur_group)
     return genus_order

@@ -60,8 +60,10 @@ def get_departments(df):
     routing_df = create_routing_table (df, departments, providers,routing_df)
     routing_df = routing_df[['Department ID', 'Department']]
     department_group = routing_df.groupby(by=[ 'Department','Department ID',])
-    depts =[]
+    depts =[{'label':'All', 'value': '0'}]
     for name_of_group,contents_of_group  in department_group:
-        cur_group = {'name': name_of_group[0], 'value': name_of_group[1] }
+        if (name_of_group[0] == 'All'):
+            continue
+        cur_group = {'label': name_of_group[0], 'value': name_of_group[1] }
         depts.append(cur_group)
     return depts
