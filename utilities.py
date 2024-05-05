@@ -21,11 +21,6 @@ def update_dictionary_values(row, name_column, value_column,value_dict):
 
 
 
-
-
-
-
-
 def update_column_values(row, value_column):
     if (row[value_column] == 'All'):
         return ['All']
@@ -47,26 +42,11 @@ def get_unique_column_values(df, column_name):
 
 
 
-# def get_genus(df):
-#     genus_df = df[['Order Genus']]
-#     genus_group = genus_df.groupby(by=['Order Genus'])
-#     genus =[]
-#     for name_of_group,contents_of_group  in genus_group:
-#         cur_group = {'name': name_of_group[0]}
-#         genus.append(cur_group)
-#     return genus
 
 
 
 
-def get_departments(df):
-    department_df = df[['Department ID', 'Department']]
-    department_group = department_df.groupby(by=[ 'Department','Department ID',])
-    depts =[]
-    for name_of_group,contents_of_group  in department_group:
-        cur_group = {'name': name_of_group[0], 'value': name_of_group[1] }
-        depts.append(cur_group)
-    return depts
+
         
 
 
