@@ -12,6 +12,6 @@ def get_providers(fileName):
             curBucket = {'label': provider['displayname'] + ' STAFF', 'value': provider['providerid']  }
             provider_list.append(curProvider)
             provider_staff_list.append(curBucket)
-    return provider_list, provider_staff_list
+    return provider_list
 
         
