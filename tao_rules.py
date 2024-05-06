@@ -38,6 +38,7 @@ def get_tao_rules(filename,ministry):
     taos_raw_data = pd.read_csv(filename)
     tao_min = taos_raw_data[taos_raw_data['CONTEXT_NAME'] == ministry]
     tao_min = fill_na_with_all(tao_min)
+    tao_min['Order Type ID'] = tao_min['Order Type ID'].astype(str)
     tao_min = update_routing_rows(tao_min)
     return tao_min
 

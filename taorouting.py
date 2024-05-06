@@ -23,9 +23,10 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 athena_tao_rules = get_tao_rules('TAO.csv','FL - Ascension - Florida')
 tao_orders = pd.read_csv('TAOOrders.csv', dtype=order_dtypes)
 tao_orders = fill_orders_na_with_all(tao_orders)
+
 tao_orders = remove_comments(tao_orders)
 # print(tao_orders.columns)
-print(tao_orders[tao_orders['orderGenus'] == 'MG'][['clinicalOrderTypeId','orderName']])
+# print(tao_orders[tao_orders['orderGenus'] == 'MG'][['clinicalOrderTypeId','orderName']])
 # drop_downs = get_dropdowns(tao_orders,athena_tao_rules)
 # print(drop_downs[0])
 # athena_tao_rules = add_new_route(athena_tao_rules,'-1', ['New Deparment'],['New DepartmentID'],['All'],['All'],'-1',['All'],['All'],['All'])
@@ -39,10 +40,27 @@ def get_data(request, string):
     return data_requested
 
 
+def get_test_order_routes():
+    return
+
+
 @app.route('/dropdowns', methods=['GET'])
 def get_all_dropdowns_async():
     drop_downs = get_dropdowns(tao_orders,athena_tao_rules)
     return json.dumps(drop_downs), 200
 
+@app.route('/testorder', methods=['POST'])
+def get_test_order_routes_async():
+    dept = request.json['testOrder']['dept']
+    print(request.json)
+    print('dept', dept)
+    provider = request.json['testOrder']['provider']
+    genus = request.json['testOrder']['genus']
+    orderType = str(request.json['testOrder']['orderType'])
+    print('order Type', orderType)
+    print(athena_tao_rules.dtypes)
+    routes = route(athena_tao_rules, dept, provider, genus, orderType).sort_values(by='Ordering')
+    print(routes)
+    return json.dumps([routes.iloc[0]['Assigned To']]), 200
 
 app.run(host='0.0.0.0', port=5001)
