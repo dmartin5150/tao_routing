@@ -52,15 +52,11 @@ def get_all_dropdowns_async():
 @app.route('/testorder', methods=['POST'])
 def get_test_order_routes_async():
     dept = request.json['testOrder']['dept']
-    print(request.json)
-    print('dept', dept)
     provider = request.json['testOrder']['provider']
     genus = request.json['testOrder']['genus']
     orderType = str(request.json['testOrder']['orderType'])
-    print('order Type', orderType)
-    print(athena_tao_rules.dtypes)
-    routes = route(athena_tao_rules, dept, provider, genus, orderType).sort_values(by='Ordering')
-    print(routes)
-    return json.dumps([routes.iloc[0]['Assigned To']]), 200
+    routes = route(athena_tao_rules, dept, provider, genus, orderType)
+    # print('results = ', routes)
+    return json.dumps(routes), 200
 
 app.run(host='0.0.0.0', port=5001)

@@ -59,6 +59,7 @@ def get_departments(df):
     routing_df = pd.DataFrame(columns=columns)
     routing_df = create_routing_table (df, departments, providers,routing_df)
     routing_df = routing_df[['Department ID', 'Department']]
+    routing_df = routing_df.drop_duplicates(subset='Department ID')
     department_group = routing_df.groupby(by=[ 'Department','Department ID',])
     depts =[{'label':'All', 'value': '0'}]
     for name_of_group,contents_of_group  in department_group:
@@ -66,4 +67,10 @@ def get_departments(df):
             continue
         cur_group = {'label': name_of_group[0], 'value': name_of_group[1] }
         depts.append(cur_group)
+    seen = {}
+    for obj in depts:
+        if obj["label"] in seen.keys():
+            depts.remove(obj)
+        else:
+            seen[obj["label"]] = 1
     return depts
